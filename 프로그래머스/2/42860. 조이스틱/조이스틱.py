@@ -1,30 +1,23 @@
 def solution(name):
     answer = 0
-    # 알파벳 변경 횟수( 상하 이동 ) 
-    spell_move = 0
+    N = len(name)
+    min_moves = N - 1 
+    first = 'A' * N
+    tmp = 0
+    for i in range(0,N):
+        # 상하 이동 계산
+        up = ord(name[i]) - ord('A')
+        down = ord('Z') - ord(name[i]) + 1
+        move1 = min(up, down)
+        
+        next_pos = i + 1
+        while next_pos < N and name[next_pos] == 'A':
+            next_pos += 1
+        move2 = min(i, N - next_pos)  # 왼쪽으로 이동한 거리와 오른쪽으로 이동한 거리 중 최소값 선택
+        min_moves = min(min_moves, i + N - next_pos + move2)
+        
+        answer += move1
 
-    
-    # 커서 이동 횟수, 이름의 길이 - 1( 좌우 이동 )
-    cursor_move = len(name) - 1  
-    
-    
-    for i, spell in enumerate(name):
-    	# 알파벳 변경 횟수, 위아래 중 최소 이동 값 ( 상하 이동 )
-        spell_move += min(ord(spell) - ord('A'), ord('Z') - ord(spell) + 1)
-        
-        # 해당 알파벳 다음부터 연속된 A 문자열 찾기
-        next = i + 1
-        while next < len(name) and name[next] == 'A':
-            next += 1
-            
-        # 아래 3가지 경우 중 최소 이동 값으로 갱신
-        # 1. 이전 커서 이동 값 ( 초기값 - 이름의 길이 - 1 )
-        # 2. 연속된 A의 왼쪽 시작
-        # 3. 연속된 A의 오른쪽 시작
-        cursor_move = min([ cursor_move, 2 * i + len(name) - next, i + 2 * (len(name) - next) ])
-        
-        
-    # 조이스틱 조작 횟수 = 알파벳 변경 횟수( 상하 이동 ) + 커서 이동 횟수( 좌우 이동 )    
-    return spell_move + cursor_move
+    return answer + min_moves
 
     
